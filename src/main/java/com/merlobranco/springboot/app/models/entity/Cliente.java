@@ -1,4 +1,4 @@
-package com.merlobranco.springboot.app.entity;
+package com.merlobranco.springboot.app.models.entity;
 
 import java.io.Serializable;
 import java.sql.Date;
