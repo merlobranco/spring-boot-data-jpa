@@ -48,6 +48,13 @@
 					<input type="email" th:field="*{email}" class="form-control" />
 				</div>
 			</div>
+			
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label">Fecha</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" th:field="*{createAt}" />
+				</div>
+			</div>
 
 			<input type="submit" value="Crear cliente" class="btn btn-primary" />
 
