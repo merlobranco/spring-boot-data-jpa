@@ -26,7 +26,7 @@ public class ClienteController {
 	public String listar(Model model) {
 		model.addAttribute("titulo", "Listado de clientes");
 		model.addAttribute("clientes", clienteDao.findAll());
-		return "listar";
+		return "/listar";
 	}
 
 	@GetMapping("/form")
@@ -34,19 +34,19 @@ public class ClienteController {
 		Cliente cliente = new Cliente();
 		model.addAttribute("titulo", "Formulario de Cliente");
 		model.addAttribute("cliente", cliente);
-		return "form";
+		return "/form";
 	}
 	
 	@GetMapping("/form/{id}")
 	public String editar(@PathVariable(value="id") Long id, Model model) {
 		if (id <= 0) {
-			return "redirect:listar";
+			return "redirect:/listar";
 		}
 		
 		Cliente cliente = clienteDao.findOne(id);
 		model.addAttribute("titulo", "Formulario de Cliente");
 		model.addAttribute("cliente", cliente);
-		return "form";
+		return "/form";
 	}
 	
 	@PostMapping("/form")
@@ -58,6 +58,13 @@ public class ClienteController {
 		
 		clienteDao.save(cliente);
 		status.setComplete();
-		return "redirect:listar";
+		return "redirect:/listar";
 	}
+	
+	@GetMapping("/eliminar/{id}")
+	public String eliminar(@PathVariable(value="id") Long id) {
+		clienteDao.delete(id);
+		return "redirect:/listar";
+	}
+	
 }
