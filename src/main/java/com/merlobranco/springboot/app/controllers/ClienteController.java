@@ -12,20 +12,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.merlobranco.springboot.app.models.dao.ClienteDao;
 import com.merlobranco.springboot.app.models.entity.Cliente;
+import com.merlobranco.springboot.app.models.service.ClienteService;
 
 @Controller
 @SessionAttributes("cliente")
 public class ClienteController {
 	
 	@Autowired
-	private ClienteDao clienteDao;
+	private ClienteService clienteService;
 	
 	@GetMapping("/listar")
 	public String listar(Model model) {
 		model.addAttribute("titulo", "Listado de clientes");
-		model.addAttribute("clientes", clienteDao.findAll());
+		model.addAttribute("clientes", clienteService.findAll());
 		return "/listar";
 	}
 
@@ -43,7 +43,7 @@ public class ClienteController {
 			return "redirect:/listar";
 		}
 		
-		Cliente cliente = clienteDao.findOne(id);
+		Cliente cliente = clienteService.findOne(id);
 		model.addAttribute("titulo", "Formulario de Cliente");
 		model.addAttribute("cliente", cliente);
 		return "/form";
@@ -56,14 +56,14 @@ public class ClienteController {
 			return "form";
 		}
 		
-		clienteDao.save(cliente);
+		clienteService.save(cliente);
 		status.setComplete();
 		return "redirect:/listar";
 	}
 	
 	@GetMapping("/eliminar/{id}")
 	public String eliminar(@PathVariable(value="id") Long id) {
-		clienteDao.delete(id);
+		clienteService.delete(id);
 		return "redirect:/listar";
 	}
 	
