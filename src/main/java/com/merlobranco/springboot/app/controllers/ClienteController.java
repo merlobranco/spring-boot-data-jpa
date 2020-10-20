@@ -25,7 +25,7 @@ import com.merlobranco.springboot.app.util.paginator.PageRender;
 @SessionAttributes("cliente")
 public class ClienteController {
 	
-	private static final int SIZE = 5;
+	private static final int SIZE = 4;
 	
 	@Autowired
 	private ClienteService clienteService;
