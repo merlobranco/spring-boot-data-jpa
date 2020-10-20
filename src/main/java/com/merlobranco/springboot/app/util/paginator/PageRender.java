@@ -45,7 +45,7 @@ public class PageRender<T> {
 			// Displaying last range of pages
 			else if (paginaActual >= totalPaginas - numElementosPorPagina/2) {
 				desde = totalPaginas - numElementosPorPagina + 1;
-				hasta = totalPaginas;
+				hasta = numElementosPorPagina;
 			} 
 			// Displaying range of pages in the middle
 			else {
@@ -56,7 +56,7 @@ public class PageRender<T> {
 		
 		// Populating the pages with their items
 		for (int i = 0; i < hasta; i++) {
-			paginas.add(new PageItem(desde + i, paginaActual == desde * i));
+			paginas.add(new PageItem(desde + i, paginaActual == desde + i));
 		}
 	}
 

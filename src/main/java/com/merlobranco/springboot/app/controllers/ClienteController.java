@@ -19,12 +19,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.merlobranco.springboot.app.models.entity.Cliente;
 import com.merlobranco.springboot.app.models.service.ClienteService;
+import com.merlobranco.springboot.app.util.paginator.PageRender;
 
 @Controller
 @SessionAttributes("cliente")
 public class ClienteController {
 	
-	private static final int SIZE = 4;
+	private static final int SIZE = 5;
 	
 	@Autowired
 	private ClienteService clienteService;
@@ -33,9 +34,11 @@ public class ClienteController {
 	public String listar(@RequestParam(name="page", defaultValue = "0") int page, Model model) {
 		Pageable pageRequest = PageRequest.of(page, SIZE);
 		Page<Cliente> clientes = clienteService.findAll(pageRequest);
+		PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
 		
 		model.addAttribute("titulo", "Listado de clientes");
 		model.addAttribute("clientes", clientes);
+		model.addAttribute("page", pageRender);
 		return "/listar";
 	}
 
