@@ -36,6 +36,23 @@ public class ClienteController {
 	@Autowired
 	private ClienteService clienteService;
 	
+	@GetMapping("/ver/{id}")
+	public String ver(@PathVariable(value="id") Long id, Model model, RedirectAttributes flash) {
+		if (id <= 0) {
+			flash.addFlashAttribute("error", "El ID del cliente no puede ser cero!");
+			return "redirect:/listar";
+		}
+		
+		Cliente cliente = clienteService.findOne(id);
+		if (cliente == null) {
+			flash.addFlashAttribute("error", "El ID del cliente no existe en la BBDD!");
+			return "redirect:/listar";
+		}
+		model.addAttribute("titulo", "Detalle cliente: " + cliente.getNombre());
+		model.addAttribute("cliente", cliente);
+		return "/ver";
+	}
+	
 	@GetMapping("/listar")
 	public String listar(@RequestParam(name="page", defaultValue = "0") int page, Model model) {
 		Pageable pageRequest = PageRequest.of(page, SIZE);
