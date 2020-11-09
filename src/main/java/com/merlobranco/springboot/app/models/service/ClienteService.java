@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.merlobranco.springboot.app.models.entity.Cliente;
+import com.merlobranco.springboot.app.models.entity.Producto;
 
 public interface ClienteService {
 	
@@ -18,5 +19,6 @@ public interface ClienteService {
 	public void save(Cliente cliente);
 	
 	public void delete(Long id);
-
+	
+	public List<Producto> findByNombre(String term);
 }

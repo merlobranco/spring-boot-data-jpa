@@ -9,13 +9,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.merlobranco.springboot.app.models.dao.ClienteDao;
+import com.merlobranco.springboot.app.models.dao.IProductoDao;
 import com.merlobranco.springboot.app.models.entity.Cliente;
+import com.merlobranco.springboot.app.models.entity.Producto;
 
 @Service
 public class ClienteServiceImpl implements ClienteService {
 	
 	@Autowired
 	private ClienteDao clienteDao;
+	
+	@Autowired
+	private IProductoDao productoDao;
 
 	@Override
 	@Transactional(readOnly=true)
@@ -45,5 +50,11 @@ public class ClienteServiceImpl implements ClienteService {
 	@Transactional
 	public void delete(Long id) {
 		clienteDao.deleteById(id);
+	}
+
+	@Override
+	@Transactional
+	public List<Producto> findByNombre(String term) {
+		return productoDao.buscarPorNombre(term);
 	}
 }
