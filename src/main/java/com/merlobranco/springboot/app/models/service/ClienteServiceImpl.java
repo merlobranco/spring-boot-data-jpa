@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.merlobranco.springboot.app.models.dao.ClienteDao;
-import com.merlobranco.springboot.app.models.dao.IProductoDao;
+import com.merlobranco.springboot.app.models.dao.ProductoDao;
 import com.merlobranco.springboot.app.models.entity.Cliente;
 import com.merlobranco.springboot.app.models.entity.Producto;
 
@@ -20,7 +20,7 @@ public class ClienteServiceImpl implements ClienteService {
 	private ClienteDao clienteDao;
 	
 	@Autowired
-	private IProductoDao productoDao;
+	private ProductoDao productoDao;
 
 	@Override
 	@Transactional(readOnly=true)
@@ -53,8 +53,8 @@ public class ClienteServiceImpl implements ClienteService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly=true)
 	public List<Producto> findByNombre(String term) {
-		return productoDao.buscarPorNombre(term);
+		return productoDao.findByNombreLikeIgnoreCase("%" + term + "%");
 	}
 }
