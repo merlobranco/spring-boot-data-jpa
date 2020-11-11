@@ -41,6 +41,12 @@
 					return false;
 				}
 			});
+			
+			// Avoiding sending during submit the template that was used for building the HTML containing the Factura items 
+			$("form").submit(function() {
+				$("#plantillaItemsFactura").remove();
+				return;
+			});
 		});
 		
 		var itemsHelper = {
