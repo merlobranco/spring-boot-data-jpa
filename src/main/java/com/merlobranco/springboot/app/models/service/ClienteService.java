@@ -32,4 +32,6 @@ public interface ClienteService {
 	public void deleteFactura(Long id);
 	
 	public Factura fecthByIdWithClienteWithItemFacturaWithProducto(Long id);
+	
+	public Cliente fecthByIdWithFacturas(Long id); 
 }

@@ -66,7 +66,7 @@ public class ClienteController {
 			return "redirect:/listar";
 		}
 
-		Cliente cliente = clienteService.findOne(id);
+		Cliente cliente = clienteService.fecthByIdWithFacturas(id);
 		if (cliente == null) {
 			flash.addFlashAttribute("error", "El ID del cliente no existe en la BBDD!");
 			return "redirect:/listar";
