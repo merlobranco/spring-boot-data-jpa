@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -83,7 +85,7 @@ public class ClienteController {
 	}
 
 	@GetMapping(value={"/listar", "/"})
-	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Authentication authentication) {
+	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Authentication authentication, HttpServletRequest request) {
 		if (authentication !=null) {
 			log.info("Hola Usuario autenticado, tu username es: ".concat(authentication.getName()));
 		}
@@ -99,6 +101,21 @@ public class ClienteController {
 		}
 		else {
 			log.info("Hola ".concat(auth.getName()).concat(" NO tienes acceso de administrador!"));
+		}
+		
+		SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(request, "");
+		if (securityContext.isUserInRole("ROLE_ADMIN")) {
+			log.info("Usando SecurityContextHolderAwareRequestWrapper. Hola ".concat(auth.getName()).concat(" tienes acceso de administrador!"));
+		}
+		else {
+			log.info("Usando SecurityContextHolderAwareRequestWrapper. Hola ".concat(auth.getName()).concat(" NO tienes acceso de administrador!"));
+		}
+		
+		if (request.isUserInRole("ROLE_ADMIN")) {
+			log.info("Usando forma nativa HttpServletRequest. Hola ".concat(auth.getName()).concat(" tienes acceso de administrador!"));
+		}
+		else {
+			log.info("Usando forma nativa HttpServletRequest. Hola ".concat(auth.getName()).concat(" NO tienes acceso de administrador!"));
 		}
 		
 		Pageable pageRequest = PageRequest.of(page, SIZE);
