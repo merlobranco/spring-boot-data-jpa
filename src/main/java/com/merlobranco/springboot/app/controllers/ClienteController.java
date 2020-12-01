@@ -2,7 +2,7 @@ package com.merlobranco.springboot.app.controllers;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.Collection;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -54,6 +54,9 @@ public class ClienteController {
 
 	@Autowired
 	private UploadFileService uploadFileService;
+	
+	@Autowired
+	private MessageSource messageSource;
 
 	@Secured("ROLE_USER")
 	@GetMapping("/uploads/{filename:.+}")
@@ -89,7 +92,7 @@ public class ClienteController {
 	}
 
 	@GetMapping(value={"/listar", "/"})
-	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Authentication authentication, HttpServletRequest request) {
+	public String listar(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Authentication authentication, HttpServletRequest request, Locale locale) {
 		if (authentication !=null) {
 			log.info("Hola Usuario autenticado, tu username es: ".concat(authentication.getName()));
 		}
@@ -126,7 +129,7 @@ public class ClienteController {
 		Page<Cliente> clientes = clienteService.findAll(pageRequest);
 		PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
 
-		model.addAttribute("titulo", "Listado de clientes");
+		model.addAttribute("titulo", messageSource.getMessage("text.cliente.listar.titulo", null, locale));
 		model.addAttribute("clientes", clientes);
 		model.addAttribute("page", pageRender);
 		return "/listar";
