@@ -89,13 +89,13 @@ public class ClienteServiceImpl implements ClienteService {
 
 	@Override
 	@Transactional(readOnly=true)
-	public Factura fecthByIdWithClienteWithItemFacturaWithProducto(Long id) {
+	public Factura fetchByIdWithClienteWithItemFacturaWithProducto(Long id) {
 		return facturaDao.fecthByIdWithClienteWithItemFacturaWithProducto(id);
 	}
 
 	@Override
 	@Transactional(readOnly=true)
-	public Cliente fecthByIdWithFacturas(Long id) {
+	public Cliente fetchByIdWithFacturas(Long id) {
 		return clienteDao.fecthByIdWithFacturas(id);
 	}
 }
