@@ -23,7 +23,7 @@ public class FacturaXlsxView extends AbstractXlsxView {
 		
 		Factura factura = (Factura)model.get("factura");
 		
-		Sheet sheet = workbook.createSheet();
+		Sheet sheet = workbook.createSheet("Factura Spring");
 		
 		// Customer data
 		Row row = sheet.createRow(0);
