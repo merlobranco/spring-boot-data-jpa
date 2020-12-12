@@ -1,5 +1,6 @@
 package com.merlobranco.springboot.app.view.pdf;
 
+import java.awt.Color;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,20 +29,33 @@ public class FacturaPdfView extends AbstractPdfView {
 		// Table with customer data
 		PdfPTable tCliente = new PdfPTable(1);
 		tCliente.setSpacingAfter(20);
-		tCliente.addCell("Datos del Cliente");
+		
+		// Customer title
+		PdfPCell cell =  new PdfPCell(new Phrase("Datos del Cliente"));
+		cell.setBackgroundColor(new Color(184, 218, 255));
+		cell.setPadding(8f);
+		
+		tCliente.addCell(cell);
 		tCliente.addCell(factura.getCliente().getNombre() + " "+ factura.getCliente().getApellido());
 		tCliente.addCell(factura.getCliente().getEmail());
 		
 		// Table with invoice data
 		PdfPTable tFactura = new PdfPTable(1);
 		tFactura.setSpacingAfter(20);
-		tFactura.addCell("Datos de la Factura");
+		
+		// Invoice title
+		cell =  new PdfPCell(new Phrase("Datos de la Factura"));
+		cell.setBackgroundColor(new Color(195, 230, 203));
+		cell.setPadding(8f);
+		
+		tFactura.addCell(cell);
 		tFactura.addCell("Folio: " + factura.getId());
 		tFactura.addCell("Descripción: " + factura.getDescripcion());
 		tFactura.addCell("Fecha: " + factura.getCreateAt());
 		
 		// Table with invoice lines data
 		PdfPTable tDetalleFactura = new PdfPTable(4);
+		tDetalleFactura.setWidths(new float [] {3.5f, 1, 1, 1});
 		tDetalleFactura.addCell("Producto");
 		tDetalleFactura.addCell("Precio");
 		tDetalleFactura.addCell("Cantidad");
@@ -50,14 +64,19 @@ public class FacturaPdfView extends AbstractPdfView {
 		for (ItemFactura item : factura.getItems()) {
 			tDetalleFactura.addCell(item.getProducto().getNombre());
 			tDetalleFactura.addCell(item.getProducto().getPrecio().toString());
-			tDetalleFactura.addCell(item.getCantidad().toString());
+			
+			// Amount
+			cell = new PdfPCell(new Phrase(item.getCantidad().toString()));
+			cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+			
+			tDetalleFactura.addCell(cell);
 			tDetalleFactura.addCell(item.calcularImporte().toString());
 		}
 		
-		PdfPCell cTotal = new PdfPCell(new Phrase("Total: "));
-		cTotal.setColspan(3);
-		cTotal.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
-		tDetalleFactura.addCell(cTotal);
+		cell = new PdfPCell(new Phrase("Total: "));
+		cell.setColspan(3);
+		cell.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+		tDetalleFactura.addCell(cell);
 		tDetalleFactura.addCell(factura.getTotal().toString());
 		
 		document.add(tCliente);
