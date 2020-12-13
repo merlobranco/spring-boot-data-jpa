@@ -5,7 +5,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -26,6 +30,8 @@ public class FacturaXlsxView extends AbstractXlsxView {
 		
 		Factura factura = (Factura)model.get("factura");
 		
+		// Providing a custom name to the file
+		response.setHeader("Content-Disposition", "attachment; filename=\"factura_view.xlsx\"");
 		Sheet sheet = workbook.createSheet("Factura Spring");
 		
 		// Customer data
@@ -52,6 +58,21 @@ public class FacturaXlsxView extends AbstractXlsxView {
 		row.createCell(0).setCellValue("Fecha:");
 		row.createCell(1).setCellValue(factura.getCreateAt());
 		
+		// Styling invoice lines data
+		CellStyle theaderStyle = workbook.createCellStyle();
+		theaderStyle.setBorderBottom(BorderStyle.MEDIUM);
+		theaderStyle.setBorderTop(BorderStyle.MEDIUM);
+		theaderStyle.setBorderRight(BorderStyle.MEDIUM);
+		theaderStyle.setBorderLeft(BorderStyle.MEDIUM);
+		theaderStyle.setFillForegroundColor(IndexedColors.GOLD.index);
+		theaderStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		
+		CellStyle tbodyStyle = workbook.createCellStyle();
+		tbodyStyle.setBorderBottom(BorderStyle.THIN);
+		tbodyStyle.setBorderTop(BorderStyle.THIN);
+		tbodyStyle.setBorderRight(BorderStyle.THIN);
+		tbodyStyle.setBorderLeft(BorderStyle.THIN);
+		
 		// Invoice lines data
 		Row header = sheet.createRow(9);
 		header.createCell(0).setCellValue("Producto");
@@ -59,21 +80,44 @@ public class FacturaXlsxView extends AbstractXlsxView {
 		header.createCell(2).setCellValue("Cantidad");
 		header.createCell(3).setCellValue("Total");
 		
+		header.getCell(0).setCellStyle(theaderStyle);
+		header.getCell(1).setCellStyle(theaderStyle);
+		header.getCell(2).setCellStyle(theaderStyle);
+		header.getCell(3).setCellStyle(theaderStyle);
+		
 		int cont = 10;
 		Row line;
 		for (ItemFactura item : factura.getItems()) {
 			line = sheet.createRow(cont);
-			line.createCell(0).setCellValue(item.getProducto().getNombre());
-			line.createCell(1).setCellValue(item.getProducto().getPrecio());
-			line.createCell(2).setCellValue(item.getCantidad());
-			line.createCell(3).setCellValue(item.calcularImporte());
+			
+			cell = line.createCell(0);
+			cell.setCellValue(item.getProducto().getNombre());
+			cell.setCellStyle(tbodyStyle);
+			
+			cell = line.createCell(1);
+			cell.setCellValue(item.getProducto().getPrecio());
+			cell.setCellStyle(tbodyStyle);
+			
+			cell = line.createCell(2);
+			cell.setCellValue(item.getCantidad());
+			cell.setCellStyle(tbodyStyle);
+			
+			cell = line.createCell(3);
+			cell.setCellValue(item.calcularImporte());
+			cell.setCellStyle(tbodyStyle);
+			
 			cont++;
 		}
 		
 		// Invoice total amount
 		line = sheet.createRow(cont);
-		line.createCell(2).setCellValue("Gran Total");
-		line.createCell(3).setCellValue(factura.getTotal());
+		cell = line.createCell(2);
+		cell.setCellValue("Gran Total");
+		cell.setCellStyle(tbodyStyle);
+		
+		cell = line.createCell(3);
+		cell.setCellValue(factura.getTotal());
+		cell.setCellStyle(tbodyStyle);
 		
 	}
 
