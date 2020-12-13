@@ -12,7 +12,10 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.view.document.AbstractXlsxView;
 
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.PdfPCell;
 import com.merlobranco.springboot.app.models.entity.Factura;
+import com.merlobranco.springboot.app.models.entity.ItemFactura;
 
 @Component("/factura/ver.xlsx")
 public class FacturaXlsxView extends AbstractXlsxView {
@@ -48,6 +51,29 @@ public class FacturaXlsxView extends AbstractXlsxView {
 		row = sheet.createRow(7);
 		row.createCell(0).setCellValue("Fecha:");
 		row.createCell(1).setCellValue(factura.getCreateAt());
+		
+		// Invoice lines data
+		Row header = sheet.createRow(9);
+		header.createCell(0).setCellValue("Producto");
+		header.createCell(1).setCellValue("Precio");
+		header.createCell(2).setCellValue("Cantidad");
+		header.createCell(3).setCellValue("Total");
+		
+		int cont = 10;
+		Row line;
+		for (ItemFactura item : factura.getItems()) {
+			line = sheet.createRow(cont);
+			line.createCell(0).setCellValue(item.getProducto().getNombre());
+			line.createCell(1).setCellValue(item.getProducto().getPrecio());
+			line.createCell(2).setCellValue(item.getCantidad());
+			line.createCell(3).setCellValue(item.calcularImporte());
+			cont++;
+		}
+		
+		// Invoice total amount
+		line = sheet.createRow(cont);
+		line.createCell(2).setCellValue("Gran Total");
+		line.createCell(3).setCellValue(factura.getTotal());
 		
 	}
 
