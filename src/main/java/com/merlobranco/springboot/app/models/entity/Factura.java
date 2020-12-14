@@ -21,6 +21,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -92,6 +93,7 @@ public class Factura implements Serializable {
 		this.createAt = createAt;
 	}
 
+	@XmlTransient
 	public Cliente getCliente() {
 		return cliente;
 	}
