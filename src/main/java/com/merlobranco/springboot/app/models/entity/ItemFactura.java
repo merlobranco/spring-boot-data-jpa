@@ -23,7 +23,7 @@ public class ItemFactura implements Serializable {
 	
 	private Integer cantidad;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="producto_id")
 	private Producto producto;
 
