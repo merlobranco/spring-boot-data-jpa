@@ -42,6 +42,7 @@ import com.merlobranco.springboot.app.models.entity.Cliente;
 import com.merlobranco.springboot.app.models.service.ClienteService;
 import com.merlobranco.springboot.app.models.service.UploadFileService;
 import com.merlobranco.springboot.app.util.paginator.PageRender;
+import com.merlobranco.springboot.app.view.xml.ClienteList;
 
 @Controller
 @SessionAttributes("cliente")
@@ -94,8 +95,8 @@ public class ClienteController {
 	}
 	
 	@GetMapping("/listar-rest")
-	public @ResponseBody List<Cliente> listarRest() {
-		return clienteService.findAll();
+	public @ResponseBody ClienteList listarRest() {
+		return new ClienteList(clienteService.findAll());
 	}
 
 	@GetMapping(value={"/listar", "/"})
