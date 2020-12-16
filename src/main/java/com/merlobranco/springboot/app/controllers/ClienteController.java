@@ -2,7 +2,6 @@ package com.merlobranco.springboot.app.controllers;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
