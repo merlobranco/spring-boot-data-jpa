@@ -2,6 +2,7 @@ package com.merlobranco.springboot.app.controllers;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -89,6 +91,11 @@ public class ClienteController {
 		model.addAttribute("titulo", messageSource.getMessage("text.cliente.detalle.titulo", null, locale).concat(": ").concat(cliente.getNombre()));
 		model.addAttribute("cliente", cliente);
 		return "/ver";
+	}
+	
+	@GetMapping("/listar-rest")
+	public @ResponseBody List<Cliente> listarRest() {
+		return clienteService.findAll();
 	}
 
 	@GetMapping(value={"/listar", "/"})
