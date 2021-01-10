@@ -36,6 +36,6 @@ public class LoginController {
 			model.addAttribute("success", messageSource.getMessage("text.login.logout", null, locale));
 		}
 		
-		return "/login";
+		return "login";
 	}
 }
